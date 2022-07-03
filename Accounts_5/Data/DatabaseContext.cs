@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Accounts_5.ConfigServices.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,48 +14,35 @@ namespace Accounts_5.Data
         {
 
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+       protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Person_Vaccination>()
-               .HasOne(p => p.Person)
-               .WithMany(pv => pv.Person_Vaccinations)
-               .HasForeignKey(pi => pi.PersonId);
-
-            modelBuilder.Entity<Person_Vaccination>()
-               .HasOne(p => p.Vaccination)
-               .WithMany(pv => pv.Person_Vaccinations)
-               .HasForeignKey(pi => pi.VaccinationId);
-
-
-            modelBuilder.Entity<Vaccination_VaccinationCenter>()
-               .HasOne(v => v.Vaccination)
-               .WithMany(vv => vv.Vaccination_VaccinationCenters)
-               .HasForeignKey(vi => vi.VaccinationId);
-
-            modelBuilder.Entity<Vaccination_VaccinationCenter>()
-               .HasOne(v => v.VaccinationCenter)
-               .WithMany(vv => vv.Vaccination_VaccinationCenters)
-               .HasForeignKey(vi => vi.VaccinationCenterId);
-
-            modelBuilder.Entity<Person_VaccinationCenter>()
-               .HasOne(p => p.Person)
-               .WithMany(pv => pv.Person_VaccinationCenters)
-               .HasForeignKey(pi => pi.PersonId);
-
-            modelBuilder.Entity<Person_VaccinationCenter>()
-               .HasOne(p => p.VaccinationCenter)
-               .WithMany(pv => pv.Person_VaccinationCenters)
-               .HasForeignKey(pi => pi.VaccinationCenterId);
-
-
-
+            modelBuilder.Entity<Vaccination>().HasMany(vc => vc.VaccinationCenter)
+                .WithMany(v => v.Vaccinations).UsingEntity<VaccinationCenter_Vaccination>(
+                vvc => vvc.HasOne(prop => prop.vaccinationCenter).WithMany().HasForeignKey(prop => prop.vaccinationCenterId),
+                vvc => vvc.HasOne(prop => prop.vaccination).WithMany().HasForeignKey(prop => prop.vaccinationId),
+                vvc => vvc.HasKey(prop => new { prop.vaccinationId, prop.vaccinationCenterId })
+                );
+            modelBuilder.Entity<Vaccination>().HasMany(vc => vc.Person)
+                .WithMany(v => v.Vaccinations).UsingEntity<Person_Vaccination>(
+                vvc => vvc.HasOne(prop => prop.Person).WithMany().HasForeignKey(prop => prop.PersonId),
+                vvc => vvc.HasOne(prop => prop.Vaccination).WithMany().HasForeignKey(prop => prop.VaccinationId),
+                vvc => vvc.HasKey(prop => new { prop.VaccinationId, prop.PersonId })
+                );
+            modelBuilder.Entity<VaccinationCenter>().HasMany(p => p.Person)
+                .WithMany(vc => vc.VaccinationCenters).UsingEntity<Person_VaccinationCenter>(
+                pv => pv.HasOne(prop => prop.Person).WithMany().HasForeignKey(prop => prop.PersonId),
+                pv => pv.HasOne(prop => prop.VaccinationCenter).WithMany().HasForeignKey(prop => prop.VaccinationCenterId),
+                pv => pv.HasKey(prop => new { prop.VaccinationCenterId, prop.PersonId })
+                );
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
         public DbSet<News> Newss { get; set; }
+        public DbSet<Person> Person { get; set; }
         public DbSet<Vaccination> Vaccinations { get; set; }
         public DbSet<Person_Vaccination> People_Vaccinations { get; set; }
         public DbSet<VaccinationCenter> VaccinationCenters { get; set; }
-        public DbSet<Vaccination_VaccinationCenter> Vaccinations_VaccinationCenters { get; set; }
+        public DbSet<VaccinationCenter_Vaccination> vaccinationCenter_Vaccinations { get; set; }
         public DbSet<Person_VaccinationCenter> People_VaccinationCenters { get; set; }
     }
 }

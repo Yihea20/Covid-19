@@ -9,12 +9,14 @@ namespace Accounts_5.Data
     public class Person_VaccinationCenter
     {
 
-        public int id { get; set; }
-       // [ForeignKey("PersonId")]
+        public int Id { get; set; }
+       [ForeignKey(nameof(Person))]
         public string PersonId { get; set; }
         public Person Person { get; set; }
-
+        [ForeignKey(nameof(VaccinationCenter))]
         public int VaccinationCenterId { get; set; }
         public VaccinationCenter VaccinationCenter { get; set; }
+
+        public DateTime dateTime { get; set; } = DateTime.Now;
     }
 }

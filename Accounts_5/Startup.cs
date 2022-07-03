@@ -1,7 +1,9 @@
 using Accounts_5.ConfigServices;
+using Accounts_5.Controllers;
 using Accounts_5.Data;
 using Accounts_5.IRepository;
 using Accounts_5.Rebository;
+using Accounts_5.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,23 +37,66 @@ namespace Accounts_5
             option.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
             services.AddAuthentication();
             services.ConfigureIdentity();
-            
+            services.Configurejwt(Configuration);
+
+
             services.AddCors(o =>
             {
                 o.AddPolicy("CorePolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
-            services.AddAutoMapper(typeof(MapperInitilizer));
+            services.ConfigureAutoMapper();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Accounts_5", Version = "v1" });
-            });
+            services.AddScoped<IAuthoManger, AuthoManger>();
+            //services.AddScoped<IGenericRepository<VaccinationCenter>,GenericRepository<VaccinationCenter>>();
+            AddSweggerDoc(services);
 
             services.AddControllers().AddNewtonsoftJson(op =>
             op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
         }
-        
+        private void AddSweggerDoc(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+
+                    Description = @"Jwt Authorization header using Bearer scheme.
+                Enter 'Bearer' [space] and then your token in the text input belew.
+                Example: 'Bearer 123456789'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference= new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            },
+                            Scheme="0outh2",
+                            Name="Bearer",
+                            In=ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
+                services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo
+                    {
+                        Title = "COVID API",
+                        Version = "v1"
+                    });
+                });
+            });
+        }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -62,11 +107,11 @@ namespace Accounts_5
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Accounts_5 v1"));
             }
-
+            app.ConfigureExceptionHandler();
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

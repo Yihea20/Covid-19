@@ -4,14 +4,16 @@ using Accounts_5.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Accounts_5.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220620184417_test8")]
+    partial class test8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,27 +113,6 @@ namespace Accounts_5.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Accounts_5.Data.Person_Vaccination", b =>
-                {
-                    b.Property<int>("VaccinationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PersonId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("VaccinationId", "PersonId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("People_Vaccinations");
-                });
-
             modelBuilder.Entity("Accounts_5.Data.Person_VaccinationCenter", b =>
                 {
                     b.Property<int>("VaccinationCenterId")
@@ -146,9 +127,14 @@ namespace Accounts_5.Migrations
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("vaccinationId")
+                        .HasColumnType("int");
+
                     b.HasKey("VaccinationCenterId", "PersonId");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("vaccinationId");
 
                     b.ToTable("People_VaccinationCenters");
                 });
@@ -254,15 +240,15 @@ namespace Accounts_5.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4b3f542d-ce6d-4146-9bf6-3bf9fe64fb88",
-                            ConcurrencyStamp = "e9e75938-a8a6-4a22-b982-74de48fcc701",
+                            Id = "bafeb430-f4db-4ffd-91fb-0b4b7582a9bc",
+                            ConcurrencyStamp = "9bc28387-6ca1-4981-a674-2aa0e00b8e88",
                             Name = "user",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "e24392ca-8b2e-4664-a64d-49dc7ee22918",
-                            ConcurrencyStamp = "c08bc17d-463d-49f5-b27e-57922d07df6c",
+                            Id = "d26f97f6-2616-47a7-be8d-38b7ab7395d9",
+                            ConcurrencyStamp = "2506a893-0a80-4dbd-a949-031df8c9b684",
                             Name = "administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -372,25 +358,6 @@ namespace Accounts_5.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Accounts_5.Data.Person_Vaccination", b =>
-                {
-                    b.HasOne("Accounts_5.Data.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Accounts_5.Data.Vaccination", "Vaccination")
-                        .WithMany()
-                        .HasForeignKey("VaccinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-
-                    b.Navigation("Vaccination");
-                });
-
             modelBuilder.Entity("Accounts_5.Data.Person_VaccinationCenter", b =>
                 {
                     b.HasOne("Accounts_5.Data.Person", "Person")
@@ -405,7 +372,15 @@ namespace Accounts_5.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Accounts_5.Data.Vaccination", "vaccination")
+                        .WithMany()
+                        .HasForeignKey("vaccinationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Person");
+
+                    b.Navigation("vaccination");
 
                     b.Navigation("VaccinationCenter");
                 });

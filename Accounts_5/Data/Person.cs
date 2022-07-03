@@ -13,7 +13,7 @@ namespace Accounts_5.Data
         public string disease { get; set; }
         public bool isVaccinated { get; set; } = false;
         //navigation prop
-        public virtual IList<Person_Vaccination> Person_Vaccinations { get; set; }
-        public virtual IList<Person_VaccinationCenter> Person_VaccinationCenters { get; set; }
+        public virtual IList<Vaccination> Vaccinations { get; set; }
+        public virtual IList<VaccinationCenter> VaccinationCenters { get; set; }
     }
 }

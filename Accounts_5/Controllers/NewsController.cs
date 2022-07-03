@@ -1,4 +1,8 @@
-﻿using Accounts_5.IRepository;
+﻿using Accounts_5.Data;
+using Accounts_5.IRepository;
+using Accounts_5.Models;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,29 +15,11 @@ namespace Accounts_5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NewsController : ControllerBase
+    public class NewsController : BaseController<News,CreateNewsDTO>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<NewsController> _logger;
-
-        public NewsController(IUnitOfWork unitOfWork, ILogger<NewsController> logger)
+        public NewsController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<News> logger) : base(unitOfWork, mapper, logger)
         {
-            _unitOfWork = unitOfWork;
-            _logger = logger;
-        }
-        [HttpGet]
-        public async Task<IActionResult> GetNews()
-        {
-            try
-            {
-                var news = await _unitOfWork.Newses.GetAll();
-                return Ok(news);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Something Want Wrong in the {nameof(GetNews)}");
-                return StatusCode(500, "Internal Server Error, Please Try Again Later.");
-            }
+            
         }
     }
 }

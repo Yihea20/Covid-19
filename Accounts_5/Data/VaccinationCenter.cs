@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Accounts_5.Data
 {
     public class VaccinationCenter
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string availableVaccinations { get; set; }
-        public int vaccinatedPeopleNumber { get; set; }
-        public virtual IList<Vaccination_VaccinationCenter> Vaccination_VaccinationCenters { get; set; }
-        public virtual IList<Person_VaccinationCenter> Person_VaccinationCenters { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+        public DateTime dateTime { get; set; } = DateTime.Now;
+        [JsonIgnore]
+        public virtual IList<Vaccination> Vaccinations { get; set; }
+        [JsonIgnore]
+        public virtual IList<Person> Person { get; set; }
 
     }
 }

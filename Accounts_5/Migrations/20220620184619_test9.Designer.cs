@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Accounts_5.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220429125325_AddNewDb")]
-    partial class AddNewDb
+    [Migration("20220620184619_test9")]
+    partial class test9
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,15 +23,18 @@ namespace Accounts_5.Migrations
 
             modelBuilder.Entity("Accounts_5.Data.News", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Newss");
                 });
@@ -110,42 +113,24 @@ namespace Accounts_5.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Accounts_5.Data.Person_Vaccination", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("PersonId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("VaccinationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("PersonId");
-
-                    b.HasIndex("VaccinationId");
-
-                    b.ToTable("People_Vaccinations");
-                });
-
             modelBuilder.Entity("Accounts_5.Data.Person_VaccinationCenter", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("vaccinationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PersonId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<int>("VaccinationCenterId")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("vaccinationId", "PersonId");
 
                     b.HasIndex("PersonId");
 
@@ -156,66 +141,74 @@ namespace Accounts_5.Migrations
 
             modelBuilder.Entity("Accounts_5.Data.Vaccination", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("doseNumber")
+                    b.Property<int>("AllowedAge")
                         .HasColumnType("int");
 
-                    b.Property<string>("name")
+                    b.Property<int>("DosesNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("type")
+                    b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Vaccinations");
                 });
 
             modelBuilder.Entity("Accounts_5.Data.VaccinationCenter", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("availableVaccinations")
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("vaccinatedPeopleNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
 
                     b.ToTable("VaccinationCenters");
                 });
 
-            modelBuilder.Entity("Accounts_5.Data.Vaccination_VaccinationCenter", b =>
+            modelBuilder.Entity("Accounts_5.Data.VaccinationCenter_Vaccination", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("VaccinationCenterId")
+                    b.Property<int>("vaccinationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VaccinationId")
+                    b.Property<int>("vaccinationCenterId")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.HasIndex("VaccinationCenterId");
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("VaccinationId");
+                    b.HasKey("vaccinationId", "vaccinationCenterId");
 
-                    b.ToTable("Vaccinations_VaccinationCenters");
+                    b.HasIndex("vaccinationCenterId");
+
+                    b.ToTable("vaccinationCenter_Vaccinations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -243,6 +236,22 @@ namespace Accounts_5.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "61e35f8d-d4a6-457b-abe7-1090a3367d57",
+                            ConcurrencyStamp = "7fb9ee8a-ebbd-4161-a587-d48097a97c76",
+                            Name = "user",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "07976e1f-b407-4804-b1b3-d55bcf09d3b7",
+                            ConcurrencyStamp = "187cc2bc-140c-4425-afe3-27a4ade29baf",
+                            Name = "administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -349,57 +358,65 @@ namespace Accounts_5.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Accounts_5.Data.Person_Vaccination", b =>
+            modelBuilder.Entity("PersonVaccinationCenter", b =>
                 {
-                    b.HasOne("Accounts_5.Data.Person", "Person")
-                        .WithMany("Person_Vaccinations")
-                        .HasForeignKey("PersonId");
+                    b.Property<string>("PersonId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasOne("Accounts_5.Data.Vaccination", "Vaccination")
-                        .WithMany("Person_Vaccinations")
-                        .HasForeignKey("VaccinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("VaccinationCentersId")
+                        .HasColumnType("int");
 
-                    b.Navigation("Person");
+                    b.HasKey("PersonId", "VaccinationCentersId");
 
-                    b.Navigation("Vaccination");
+                    b.HasIndex("VaccinationCentersId");
+
+                    b.ToTable("PersonVaccinationCenter");
                 });
 
             modelBuilder.Entity("Accounts_5.Data.Person_VaccinationCenter", b =>
                 {
                     b.HasOne("Accounts_5.Data.Person", "Person")
-                        .WithMany("Person_VaccinationCenters")
-                        .HasForeignKey("PersonId");
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Accounts_5.Data.VaccinationCenter", "VaccinationCenter")
-                        .WithMany("Person_VaccinationCenters")
+                        .WithMany()
                         .HasForeignKey("VaccinationCenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Accounts_5.Data.Vaccination", "vaccination")
+                        .WithMany()
+                        .HasForeignKey("vaccinationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Person");
 
+                    b.Navigation("vaccination");
+
                     b.Navigation("VaccinationCenter");
                 });
 
-            modelBuilder.Entity("Accounts_5.Data.Vaccination_VaccinationCenter", b =>
+            modelBuilder.Entity("Accounts_5.Data.VaccinationCenter_Vaccination", b =>
                 {
-                    b.HasOne("Accounts_5.Data.VaccinationCenter", "VaccinationCenter")
-                        .WithMany("Vaccination_VaccinationCenters")
-                        .HasForeignKey("VaccinationCenterId")
+                    b.HasOne("Accounts_5.Data.VaccinationCenter", "vaccinationCenter")
+                        .WithMany()
+                        .HasForeignKey("vaccinationCenterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Accounts_5.Data.Vaccination", "Vaccination")
-                        .WithMany("Vaccination_VaccinationCenters")
-                        .HasForeignKey("VaccinationId")
+                    b.HasOne("Accounts_5.Data.Vaccination", "vaccination")
+                        .WithMany()
+                        .HasForeignKey("vaccinationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Vaccination");
+                    b.Navigation("vaccination");
 
-                    b.Navigation("VaccinationCenter");
+                    b.Navigation("vaccinationCenter");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -453,25 +470,19 @@ namespace Accounts_5.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Accounts_5.Data.Person", b =>
+            modelBuilder.Entity("PersonVaccinationCenter", b =>
                 {
-                    b.Navigation("Person_VaccinationCenters");
+                    b.HasOne("Accounts_5.Data.Person", null)
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Person_Vaccinations");
-                });
-
-            modelBuilder.Entity("Accounts_5.Data.Vaccination", b =>
-                {
-                    b.Navigation("Person_Vaccinations");
-
-                    b.Navigation("Vaccination_VaccinationCenters");
-                });
-
-            modelBuilder.Entity("Accounts_5.Data.VaccinationCenter", b =>
-                {
-                    b.Navigation("Person_VaccinationCenters");
-
-                    b.Navigation("Vaccination_VaccinationCenters");
+                    b.HasOne("Accounts_5.Data.VaccinationCenter", null)
+                        .WithMany()
+                        .HasForeignKey("VaccinationCentersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

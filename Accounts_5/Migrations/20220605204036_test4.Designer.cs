@@ -4,14 +4,16 @@ using Accounts_5.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Accounts_5.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220605204036_test4")]
+    partial class test4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +30,6 @@ namespace Accounts_5.Migrations
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -122,9 +121,6 @@ namespace Accounts_5.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("VaccinationId", "PersonId");
 
                     b.HasIndex("PersonId");
@@ -142,9 +138,6 @@ namespace Accounts_5.Migrations
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("VaccinationCenterId", "PersonId");
 
@@ -172,9 +165,6 @@ namespace Accounts_5.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("Vaccinations");
@@ -196,9 +186,6 @@ namespace Accounts_5.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("VaccinationCenters");
@@ -214,9 +201,6 @@ namespace Accounts_5.Migrations
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("vaccinationId", "vaccinationCenterId");
 
@@ -254,15 +238,15 @@ namespace Accounts_5.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4b3f542d-ce6d-4146-9bf6-3bf9fe64fb88",
-                            ConcurrencyStamp = "e9e75938-a8a6-4a22-b982-74de48fcc701",
+                            Id = "6b2c5af4-8eb1-41c7-9439-1c367643a064",
+                            ConcurrencyStamp = "51c1455a-d644-4d46-90e5-00b360a4e58a",
                             Name = "user",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "e24392ca-8b2e-4664-a64d-49dc7ee22918",
-                            ConcurrencyStamp = "c08bc17d-463d-49f5-b27e-57922d07df6c",
+                            Id = "c9513378-d259-426c-8629-f183b803cb36",
+                            ConcurrencyStamp = "e438ef4e-4567-44c0-9ba5-7f258437678c",
                             Name = "administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

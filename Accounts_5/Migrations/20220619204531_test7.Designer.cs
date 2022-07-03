@@ -4,14 +4,16 @@ using Accounts_5.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Accounts_5.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220619204531_test7")]
+    partial class test7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,15 +256,15 @@ namespace Accounts_5.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4b3f542d-ce6d-4146-9bf6-3bf9fe64fb88",
-                            ConcurrencyStamp = "e9e75938-a8a6-4a22-b982-74de48fcc701",
+                            Id = "998735aa-c539-4690-8ace-8c8c97e3704c",
+                            ConcurrencyStamp = "9fb27f9e-23f6-406d-973d-274e5eb7e19e",
                             Name = "user",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "e24392ca-8b2e-4664-a64d-49dc7ee22918",
-                            ConcurrencyStamp = "c08bc17d-463d-49f5-b27e-57922d07df6c",
+                            Id = "27682245-9a4c-49c7-9eda-f0226b9ca2ce",
+                            ConcurrencyStamp = "b9937aac-4a07-4de1-ba25-7547bacd561f",
                             Name = "administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

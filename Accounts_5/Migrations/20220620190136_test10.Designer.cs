@@ -4,14 +4,16 @@ using Accounts_5.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Accounts_5.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220620190136_test10")]
+    partial class test10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,9 +148,14 @@ namespace Accounts_5.Migrations
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("vaccinationId")
+                        .HasColumnType("int");
+
                     b.HasKey("VaccinationCenterId", "PersonId");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("vaccinationId");
 
                     b.ToTable("People_VaccinationCenters");
                 });
@@ -254,15 +261,15 @@ namespace Accounts_5.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4b3f542d-ce6d-4146-9bf6-3bf9fe64fb88",
-                            ConcurrencyStamp = "e9e75938-a8a6-4a22-b982-74de48fcc701",
+                            Id = "5f3e0b9b-ba39-4b83-a2f2-42e40391f31c",
+                            ConcurrencyStamp = "d6c5b2df-932b-4168-8af9-bf9bc05f9eed",
                             Name = "user",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "e24392ca-8b2e-4664-a64d-49dc7ee22918",
-                            ConcurrencyStamp = "c08bc17d-463d-49f5-b27e-57922d07df6c",
+                            Id = "16e9b9f4-68c7-492e-b785-148bba2ac167",
+                            ConcurrencyStamp = "f6aadc70-0df8-4fdd-9d50-6bfe096a96ce",
                             Name = "administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -405,7 +412,15 @@ namespace Accounts_5.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Accounts_5.Data.Vaccination", "vaccination")
+                        .WithMany()
+                        .HasForeignKey("vaccinationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Person");
+
+                    b.Navigation("vaccination");
 
                     b.Navigation("VaccinationCenter");
                 });

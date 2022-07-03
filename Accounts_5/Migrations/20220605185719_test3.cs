@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Accounts_5.Migrations
 {
-    public partial class Data_Covid : Migration
+    public partial class test3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,49 +47,6 @@ namespace Accounts_5.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Newss",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Newss", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VaccinationCenters",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    availableVaccinations = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    vaccinatedPeopleNumber = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VaccinationCenters", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Vaccinations",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    doseNumber = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vaccinations", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,45 +159,24 @@ namespace Accounts_5.Migrations
                 name: "People_VaccinationCenters",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PersonId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    VaccinationCenterId = table.Column<int>(type: "int", nullable: false)
+                    PersonId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VaccinationCenterId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People_VaccinationCenters", x => x.id);
+                    table.PrimaryKey("PK_People_VaccinationCenters", x => new { x.VaccinationCenterId, x.PersonId });
                     table.ForeignKey(
                         name: "FK_People_VaccinationCenters_AspNetUsers_PersonId",
                         column: x => x.PersonId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_People_VaccinationCenters_VaccinationCenters_VaccinationCenterId",
                         column: x => x.VaccinationCenterId,
                         principalTable: "VaccinationCenters",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Doses",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    number = table.Column<int>(type: "int", nullable: false),
-                    VaccinationId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doses", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Doses_Vaccinations_VaccinationId",
-                        column: x => x.VaccinationId,
-                        principalTable: "Vaccinations",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -248,51 +184,24 @@ namespace Accounts_5.Migrations
                 name: "People_Vaccinations",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PersonId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    VaccinationId = table.Column<int>(type: "int", nullable: false)
+                    PersonId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VaccinationId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People_Vaccinations", x => x.id);
+                    table.PrimaryKey("PK_People_Vaccinations", x => new { x.VaccinationId, x.PersonId });
                     table.ForeignKey(
                         name: "FK_People_Vaccinations_AspNetUsers_PersonId",
                         column: x => x.PersonId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_People_Vaccinations_Vaccinations_VaccinationId",
                         column: x => x.VaccinationId,
                         principalTable: "Vaccinations",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Vaccinations_VaccinationCenters",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    VaccinationId = table.Column<int>(type: "int", nullable: false),
-                    VaccinationCenterId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vaccinations_VaccinationCenters", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Vaccinations_VaccinationCenters_VaccinationCenters_VaccinationCenterId",
-                        column: x => x.VaccinationCenterId,
-                        principalTable: "VaccinationCenters",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Vaccinations_VaccinationCenters_Vaccinations_VaccinationId",
-                        column: x => x.VaccinationId,
-                        principalTable: "Vaccinations",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -336,39 +245,14 @@ namespace Accounts_5.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Doses_VaccinationId",
-                table: "Doses",
-                column: "VaccinationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_People_VaccinationCenters_PersonId",
                 table: "People_VaccinationCenters",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_People_VaccinationCenters_VaccinationCenterId",
-                table: "People_VaccinationCenters",
-                column: "VaccinationCenterId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_People_Vaccinations_PersonId",
                 table: "People_Vaccinations",
                 column: "PersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_People_Vaccinations_VaccinationId",
-                table: "People_Vaccinations",
-                column: "VaccinationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vaccinations_VaccinationCenters_VaccinationCenterId",
-                table: "Vaccinations_VaccinationCenters",
-                column: "VaccinationCenterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vaccinations_VaccinationCenters_VaccinationId",
-                table: "Vaccinations_VaccinationCenters",
-                column: "VaccinationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -389,31 +273,16 @@ namespace Accounts_5.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Doses");
-
-            migrationBuilder.DropTable(
-                name: "Newss");
-
-            migrationBuilder.DropTable(
                 name: "People_VaccinationCenters");
 
             migrationBuilder.DropTable(
                 name: "People_Vaccinations");
 
             migrationBuilder.DropTable(
-                name: "Vaccinations_VaccinationCenters");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "VaccinationCenters");
-
-            migrationBuilder.DropTable(
-                name: "Vaccinations");
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Accounts_5.Controllers
         }
 
         [HttpPost]
+        [Route("post")]
         public async Task<IActionResult> Create([FromBody] C newsDTO)
         {
             if (!ModelState.IsValid)
@@ -62,13 +63,13 @@ namespace Accounts_5.Controllers
             return NoContent();
         }
     
-       [Authorize]
+      
         [HttpGet]
         public async Task<IActionResult> Get_All()
         {
                 if (typeof(T) == typeof(VaccinationCenter))
                 {
-                    var newses = await _unitOfWork.VaccinationCenters.GetAll(include: q => q.Include(x => x.Vaccinations), includee:q => q.Include(x => x.Person));
+                    var newses = await _unitOfWork.VaccinationCenters.GetAll(include: q => q.Include(x => x.Vaccinations));
                     var result = _mapper.Map<IList<VaccinationCenterDTO>>(newses);
                     return Ok(result);
                 }
@@ -80,8 +81,7 @@ namespace Accounts_5.Controllers
                 }
                 else if (typeof(T) == typeof(Vaccination))
                 {
-                    var newses = await _unitOfWork.Vaccinaions.GetAll(include:q=>q.Include(x=>x.Person)
-                    ,includee:q=>q.Include(x=>x.VaccinationCenter));
+                    var newses = await _unitOfWork.Vaccinaions.GetAll(includee:q=>q.Include(x=>x.VaccinationCenter));
                     var result = _mapper.Map<IList<VaccinationDTO>>(newses);
                     return Ok(result);
                 }
@@ -143,7 +143,7 @@ namespace Accounts_5.Controllers
                 }
                 return Ok();
         }
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult>Delete(int id)
         {
                 if (typeof(T) == typeof(VaccinationCenter))

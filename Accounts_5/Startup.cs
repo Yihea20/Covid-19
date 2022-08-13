@@ -18,6 +18,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Azure;
+using Azure.Storage.Queues;
+using Azure.Storage.Blobs;
+using Azure.Core.Extensions;
 
 namespace Accounts_5
 {
@@ -53,6 +57,11 @@ namespace Accounts_5
             services.AddControllers().AddNewtonsoftJson(op =>
             op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+            services.AddAzureClients(builder =>
+            {
+                builder.AddBlobServiceClient(Configuration["Accounts_15Conne:blob"], preferMsi: true);
+                builder.AddQueueServiceClient(Configuration["Accounts_15Conne:queue"], preferMsi: true);
+            });
         }
         private void AddSweggerDoc(IServiceCollection services)
         {
@@ -105,11 +114,14 @@ namespace Accounts_5
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Accounts_5 v1"));
+                app.UseSwaggerUI(c=> {
+                    string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+                    c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Covid_19 API");
+                });
             }
             app.ConfigureExceptionHandler();
             app.UseHttpsRedirection();
-            app.UseCors("AllowAll");
+            app.UseCors("CorePolicy");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -119,6 +131,31 @@ namespace Accounts_5
                 
                 endpoints.MapControllers();
             });
+        }
+    }
+    internal static class StartupExtensions
+    {
+        public static IAzureClientBuilder<BlobServiceClient, BlobClientOptions> AddBlobServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddBlobServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddBlobServiceClient(serviceUriOrConnectionString);
+            }
+        }
+        public static IAzureClientBuilder<QueueServiceClient, QueueClientOptions> AddQueueServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddQueueServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddQueueServiceClient(serviceUriOrConnectionString);
+            }
         }
     }
 }

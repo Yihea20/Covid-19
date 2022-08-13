@@ -12,6 +12,7 @@ namespace Accounts_5.Data
         public int Id { get; set; }
 
         public string Title { get; set; }
+        public string Parag { get; set; }
         public DateTime dateTime { get; set; } = DateTime.Now;
     }
 }

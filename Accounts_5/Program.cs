@@ -37,7 +37,9 @@ namespace Accounts_5
             Host.CreateDefaultBuilder(args).UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    
+                    webBuilder.UseStartup<Startup>().UseUrls("http://0.0.0.0:5000");
+                   
                 });
     }
 }

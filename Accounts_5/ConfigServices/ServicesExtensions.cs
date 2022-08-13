@@ -71,9 +71,9 @@ namespace Accounts_5.ConfigServices
                         await context.Response.WriteAsync(new Error
                         {
                             StatusCode = context.Response.StatusCode,
-                            Message = "Internal Server Error, Please Try Again Later."
+                            Message = contextFeature.Error.Message
                         }.ToString()
-                        );
+                        ) ;
                     }
                 });
             });

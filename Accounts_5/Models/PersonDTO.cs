@@ -12,7 +12,7 @@ namespace Accounts_5.Models
         public string id { get; set; }
 
         [Required]
-            [StringLength(15, ErrorMessage = "Your Password is limited {4}to{15} Charcters", MinimumLength = 6)]
+            [StringLength(50, ErrorMessage = "Your Password is limited {4}to{15} Charcters", MinimumLength = 6)]
             public string Password { get; set; }
 
         }

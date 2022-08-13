@@ -10,12 +10,13 @@ namespace Accounts_5.Models
     {
         [Required]
         public string Title { get; set; }
+        public string Parag { get; set; }
     }
 
     public class NewsDTO:CreateNewsDTO
     {
         public int Id { get; set; }
-        public DateTime dateTime { get; set; }
+       // public DateTime dateTime { get; set; }
 
     }
 }

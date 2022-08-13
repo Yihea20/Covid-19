@@ -59,11 +59,11 @@ namespace Accounts_5.Controllers
                         ModelState.AddModelError(Error.Code, Error.Description);
                         
                     }
-                    return BadRequest("user Registeration Attempt Faild");
+                    return BadRequest(ModelState);
                 }
                 await _userManager.AddToRolesAsync(user, personDTO.roleName);
                
-                return Accepted();
+                return Ok($"StatusCode:{StatusCodes.Status202Accepted}");
             }
             catch (Exception ex)
             {

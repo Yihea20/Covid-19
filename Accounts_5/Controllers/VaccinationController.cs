@@ -80,5 +80,12 @@ namespace Accounts_5.Controllers
                 return StatusCode(500, "Internal Server Error, Please Try Again Later.");
             }
         }
+        //[HttpPost]
+        //[Route("Shdual")]
+        //public Task<IActionResult> Shdual(DateTime dateTime,int pesonId,int vaccination_centerId,int vaccinationId)
+        //{
+
+        //    return Ok();
+        //}
     }
 }
